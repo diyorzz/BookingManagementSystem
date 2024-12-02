@@ -104,13 +104,14 @@
     {
         await Commander.Call(new Add_Command(customerId, selectedPriority));
     }
-    private async void ProcessNextTicket()
-    {
-        await TicketService.GetNextTicket();
-    }
+
     private async Task CompleteTicket(int ticketId)
     {
         await Commander.Call(new Revome_Command(ticketId));
-        //await TicketService.CompleteTicket(ticketId);
+    }
+
+    private async void ProcessNextTicket()
+    {
+        await TicketService.GetNextTicket();
     }
 }
