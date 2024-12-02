@@ -1,0 +1,113 @@
+﻿@page "/tickets"
+@using System.Threading
+@using ActualLab.Fusion.Blazor
+@using ActualLab.Fusion.Extensions
+@using BookingSystem.Models
+@using BookingSystem.Service
+@inherits ComputedStateComponent<List<BookingSystem.Models.Ticket>>
+@inject TicketService TicketService
+@inject IFusionTime Time
+@inject NavigationManager Nav
+
+@{
+    var state = State.ValueOrDefault;
+    var error = State.Error;
+}
+
+<h1>Tickets</h1>
+
+<div class="container mt-5">
+    <div class="card shadow-sm p-4 mb-4">
+        <h5 class="card-title text-primary mb-4">Add a New Ticket</h5>
+
+        <div class="form-group mb-3">
+            <label for="customerId">Customer ID:</label>
+            <input @bind="customerId" type="number" class="form-control" id="customerId" placeholder="Enter Customer ID" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="priority">Priority:</label>
+            <select @bind="selectedPriority" class="form-control" id="priority">
+                @foreach (var priority in Enum.GetValues<TicketPriority>())
+                {
+                    <option value="@priority">@priority</option>
+                }
+            </select>
+        </div>
+
+        <button class="btn btn-primary w-100" @onclick="AddTicket">
+            <i class="fas fa-plus-circle"></i> Add Ticket
+        </button>
+    </div>
+
+    <div class="d-flex justify-content-center mb-4">
+        <button class="btn btn-secondary w-50" @onclick="ProcessNextTicket">
+            <i class="fas fa-tasks"></i> Process Next Ticket
+        </button>
+    </div>
+
+    <h5 class="text-center text-secondary mb-3">Tickets</h5>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Customer ID</th>
+                    <th>Priority</th>
+                    <th>Creation Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in state)
+                {
+                    <tr>
+                        <td>@ticket.Id</td>
+                        <td>@ticket.CustomerId</td>
+                        <td>@ticket.Priority</td>
+                        <td>@ticket.CreationTime.ToString("g")</td>
+                        <td>
+                            @if (ticket.Status == TicketStatus.Processing)
+                            {
+                                <button class="btn btn-success btn-sm" @onclick="() => CompleteTicket(ticket.Id)">
+                                    <i class="fas fa-check-circle"></i> Complete
+                                </button>
+                            }
+                            else
+                            {
+                                @ticket.Status
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+    private int customerId;
+
+    private TicketPriority selectedPriority = TicketPriority.Low;
+
+    protected override async Task<List<BookingSystem.Models.Ticket>> ComputeState(CancellationToken cancellationToken)
+    {
+        var tickets = await TicketService.GetTickets();
+        return tickets;
+    }
+
+    private async Task AddTicket()
+    {
+        await TicketService.AddTicket(customerId,selectedPriority);
+    }
+    private async void ProcessNextTicket()
+    {
+        await TicketService.GetNextTicket();
+    }
+    private async Task CompleteTicket(int ticketId)
+    {
+        await TicketService.CompleteTicket(ticketId);
+    }
+}
