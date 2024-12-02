@@ -1,5 +1,6 @@
 ﻿@page "/tickets"
 @using System.Threading
+@using ActualLab.CommandR
 @using ActualLab.Fusion.Blazor
 @using ActualLab.Fusion.Extensions
 @using BookingSystem.Models
@@ -8,6 +9,7 @@
 @inject TicketService TicketService
 @inject IFusionTime Time
 @inject NavigationManager Nav
+@inject ICommander Commander
 
 @{
     var state = State.ValueOrDefault;
@@ -100,14 +102,16 @@
 
     private async Task AddTicket()
     {
-        await TicketService.AddTicket(customerId,selectedPriority);
+        await Commander.Call(new Add_Command(customerId, selectedPriority));
     }
+
+    private async Task CompleteTicket(int ticketId)
+    {
+        await Commander.Call(new Revome_Command(ticketId));
+    }
+
     private async void ProcessNextTicket()
     {
         await TicketService.GetNextTicket();
-    }
-    private async Task CompleteTicket(int ticketId)
-    {
-        await TicketService.CompleteTicket(ticketId);
     }
 }

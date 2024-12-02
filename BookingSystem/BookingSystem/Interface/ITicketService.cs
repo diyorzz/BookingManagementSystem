@@ -1,5 +1,7 @@
-﻿using ActualLab.Fusion;
+﻿using ActualLab.CommandR.Configuration;
+using ActualLab.Fusion;
 using BookingSystem.Models;
+using BookingSystem.Service;
 
 namespace BookingSystem.Interface
 {
@@ -7,8 +9,13 @@ namespace BookingSystem.Interface
     {
         [ComputeMethod]
         Task<List<Ticket>> GetTickets();
+
+        [CommandHandler]
+        Task CompleteTicket(Revome_Command revome_Command, CancellationToken cancellation);
+
+        [CommandHandler]
+        Task AddTicket(Add_Command add_Comand, CancellationToken cancellation);
+
         Task GetNextTicket();
-        Task CompleteTicket(int ticketId);
-        Task AddTicket(int customerId, TicketPriority ticketPriority);
     }
 }

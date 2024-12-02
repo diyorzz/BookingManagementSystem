@@ -1,13 +1,18 @@
 using ActualLab.Fusion;
 using ActualLab.Fusion.Blazor;
 using ActualLab.Fusion.Extensions;
+using BookingSystem.Database;
 using BookingSystem.Service;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddDbContext<BookingManagementDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("BookingConnection")));
 
 var fusion = builder.Services.AddFusion();
 fusion.AddBlazor();
