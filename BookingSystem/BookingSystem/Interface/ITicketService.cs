@@ -17,6 +17,6 @@ namespace BookingSystem.Interface
         Task AddTicket(Add_Command add_Command, CancellationToken cancellation = default);
 
         [CommandHandler]
-        Task GetNextTicket(Update_Status update_Command,CancellationToken cancellation = default);
+        Task GetNextTicket(Update_Status update_Command, CancellationToken cancellation = default);
     }
 }
