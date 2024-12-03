@@ -62,26 +62,35 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var ticket in state)
+                @if (state == null || !state.Any())
                 {
                     <tr>
-                        <td>@ticket.Id</td>
-                        <td>@ticket.CustomerId</td>
-                        <td>@ticket.Priority</td>
-                        <td>@ticket.CreationTime.ToString("g")</td>
-                        <td>
-                            @if (ticket.Status == TicketStatus.Processing)
-                            {
-                                <button class="btn btn-success btn-sm" @onclick="() => CompleteTicket(ticket.Id)">
-                                    <i class="fas fa-check-circle"></i> Complete
-                                </button>
-                            }
-                            else
-                            {
-                                @ticket.Status
-                            }
-                        </td>
+                        <td colspan="5" class="text-center">Ticket mavjud emas</td>
                     </tr>
+                }
+                else
+                {
+                    @foreach (var ticket in state)
+                    {
+                        <tr>
+                            <td>@ticket.Id</td>
+                            <td>@ticket.CustomerId</td>
+                            <td>@ticket.Priority</td>
+                            <td>@ticket.CreationTime.ToString("g")</td>
+                            <td>
+                                @if (ticket.Status == TicketStatus.Processing)
+                                {
+                                    <button class="btn btn-success btn-sm" @onclick="() => CompleteTicket(ticket.Id)">
+                                        <i class="fas fa-check-circle"></i> Complete
+                                    </button>
+                                }
+                                else
+                                {
+                                    @ticket.Status
+                                }
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -110,8 +119,8 @@
         await Commander.Call(new Revome_Command(ticketId));
     }
 
-    private async void ProcessNextTicket()
+    private async Task ProcessNextTicket()
     {
-        await TicketService.GetNextTicket();
+        await Commander.Call(new Update_Status());
     }
 }

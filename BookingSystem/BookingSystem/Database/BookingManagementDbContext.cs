@@ -1,22 +1,23 @@
-﻿using BookingSystem.Models;
+﻿using ActualLab.Fusion.Authentication.Services;
+using ActualLab.Fusion.EntityFramework;
+using ActualLab.Fusion.EntityFramework.Operations;
+using BookingSystem.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
-namespace BookingSystem.Database
+namespace BookingSystem.Database;
+
+public class BookingManagementDbContext : DbContextBase
 {
-    public class BookingManagementDbContext : DbContext
-    {
-        public DbSet<Ticket> Tickets { get; set; }
+    public BookingManagementDbContext(DbContextOptions options) : base(options) { }
 
-        public BookingManagementDbContext(DbContextOptions<BookingManagementDbContext> options)
-            : base(options)
-        {
-            Database.Migrate();
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            base.OnModelCreating(modelBuilder);
-        }
-    }
+    // App's own tables
+    public DbSet<Ticket> Tickets { get; protected set; } = null!;
+    // ActualLab.Fusion.EntityFramework tables
+    public DbSet<DbUser<string>> Users { get; protected set; } = null!;
+    public DbSet<DbUserIdentity<string>> UserIdentities { get; protected set; } = null!;
+    public DbSet<DbSessionInfo<string>> Sessions { get; protected set; } = null!;
+
+    // ActualLab.Fusion.EntityFramework.Operations tables
+    public DbSet<DbOperation> Operations { get; protected set; } = null!;
+    public DbSet<DbEvent> Events { get; protected set; } = null!;
 }

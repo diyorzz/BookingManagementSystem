@@ -8,16 +8,21 @@
 
   <ItemGroup>
     <PackageReference Include="ActualLab.Fusion.Blazor" Version="9.6.2" />
+    <PackageReference Include="ActualLab.Fusion.EntityFramework" Version="9.6.2" />
+    <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="9.6.2" />
     <PackageReference Include="ActualLab.Fusion.Server" Version="9.6.2" />
     <PackageReference Include="ActualLab.Generators" Version="9.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.20">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
