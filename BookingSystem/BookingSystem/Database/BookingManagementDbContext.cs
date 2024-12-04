@@ -8,7 +8,10 @@ namespace BookingSystem.Database;
 
 public class BookingManagementDbContext : DbContextBase
 {
-    public BookingManagementDbContext(DbContextOptions options) : base(options) { }
+    public BookingManagementDbContext(DbContextOptions options) : base(options) 
+    {
+        Database.Migrate();    
+    }
 
     // App's own tables
     public DbSet<Ticket> Tickets { get; protected set; } = null!;
